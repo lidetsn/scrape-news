@@ -1,1 +1,1 @@
-# Sscrape-news
+# Scrape-news
