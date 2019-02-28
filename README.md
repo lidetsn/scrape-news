@@ -1,4 +1,4 @@
-# Scrape-news
+# Scrape-news   (Heroku link : https://shrouded-garden-29274.herokuapp.com/)
 
 scrape-news is a web app that lets users view and leave comments on the latest tech news from another site . It stores article titles ,links and summary in MongoDB
    It has the following options
@@ -19,4 +19,8 @@ scrape-news is a web app that lets users view and leave comments on the latest t
      and to start/stop the Node server.
    * run npm install using the Command Prompt (Windows) / Terminal (Mac) to install the required packages
    * then run node server.js
-   *open localhost:8080
+   * open localhost:8080
+ 
+
+ Heroku Link  https://shrouded-garden-29274.herokuapp.com/
+
