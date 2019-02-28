@@ -3,21 +3,18 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 exphbs = require('express-handlebars'),
 path = require('path');
-
 var axios = require("axios");
 var cheerio = require("cheerio");
 
 // Require all models
 var db = require("./models");
-var PORT = 3000;
+var PORT = 8080;
 
 var app = express();
-
 //,,,,,,,,,,,,,,,,,,,,,,,,,,,
 // use handlebars
 app.engine("handlebars", exphbs({defaultLayout: "main"}));
 app.set("view engine", "handlebars");
-
 
 app.use(logger("dev"));
 // Parse request body as JSON
@@ -27,24 +24,35 @@ app.use(express.json());
 app.use(express.static("public"));
 //app.use(express.static(path.join(__dirname, 'public')));
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/teckNewsDb", { useNewUrlParser: true });
+var MONGODB_URI = process.env.MONGODB_URI ||"mongodb://localhost/teckNewsDb"
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
-// app.get("/", function(req, res) {
+app.get("/saved", function(req, res) {
+  db.Article.find({})
+    .then(function(dbArticle) {      
+      console.log(dbArticle)
+      res.render("saved", {
+                  articles: dbArticle
+                });
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
 
-//   db.Article.find({
-//       saved: false
-//     },
+app.get("/", function(req, res) {
+  db.Article.find({})
+    .then(function(dbArticle) {      
+      console.log(dbArticle)
+      res.render("index", {
+                  articles: dbArticle
+                });
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+});
 
-//     function(error, dbArticle) {
-//       if (error) {
-//         console.log(error);
-//       } else {
-//         res.render("index", {
-//           articles: dbArticle
-//         });
-//       }
-//     })
-// })
 
 // Routes
 // A GET route for scraping the echoJS website
