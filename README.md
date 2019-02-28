@@ -1,14 +1,16 @@
-# Scrape-news   (Heroku link : https://shrouded-garden-29274.herokuapp.com/)
+## Scrape-news   (Heroku link : https://shrouded-garden-29274.herokuapp.com/)
 
-scrape-news is a web app that lets users view and leave comments on the latest tech news from another site . It stores article titles ,links and summary in MongoDB
+scrape-news is a web app that lets users view and leave comments on the latest tech news from another site . It stores article titles ,links and summary in.
+
    It has the following options
-      #### Get new articles
-      * see updated news stories
-      #### save article
-      * save the article in mongo db
-      ### Remove from saved 
+
+      1) Get new articles
+      * see updated news stories     
+      2) save article      
+      * save the article in mongo db      
+      3)Remove from saved 
       * remove the selected article from the mongo db
-      #### Add note
+      4)Add note
       * add a comment to the article
 
 ## installation guide
