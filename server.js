@@ -8,7 +8,7 @@ var cheerio = require("cheerio");
 
 // Require all models
 var db = require("./models");
-var PORT = 8080;
+var PORT = process.env.PORT || 8080;
 
 var app = express();
 //,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -25,7 +25,7 @@ app.use(express.static("public"));
 //app.use(express.static(path.join(__dirname, 'public')));
 // Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI ||"mongodb://localhost/teckNewsDataBase"
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI);
 
 app.get("/saved", function(req, res) {
   db.Article.find( {saved: true})
