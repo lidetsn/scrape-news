@@ -11,7 +11,21 @@ scrape-news is a web app that lets users view and leave comments on the latest t
       3)Remove from saved 
       * remove the selected article from the mongo db
       4)Add note
-      * add a comment to the article
+      * add a note to the article
+      5)Remove note
+      * delete saved note
+### Technology used
+* HTML 
+* Bootstarp
+* css
+* javascript/jquery
+* axios
+ * cheerio
+ * express
+ * express-handlebars
+ * mongoose
+ * morgan
+
 
 ## installation guide
       To run the app at localhost follow these steps
