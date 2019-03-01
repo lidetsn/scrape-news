@@ -1,5 +1,5 @@
 
-      body { background-color: whitesmoke}
+      body { background-color:white}
       #wrapper {
         width: 960px;
         margin-left: auto;
@@ -29,9 +29,15 @@
         height: 200px;
         font-size: 18px;
       }
-    h1{
+    h3{
       font-family: cursive
     }
-    .card-body{
+    .card-body,.jumbotron{
       background: white;
+    }
+    .jumbotron{
+      height: 100px;
+    }
+    .maincontainer{
+      background-color: whitesmoke
     }

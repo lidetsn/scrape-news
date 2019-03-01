@@ -1,17 +1,20 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light mt-2">
-  <a class="navbar-brand" href="#">Scraper</a>
+<div class="container  mt-4 maincontainer">
+<div class="container">
+<nav class="navbar navbar-expand-lg navbar-light  bg-dark ">
+  <a class="navbar-brand text-white" href="#">Scraper</a>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="/">Home</a>
-      <a class="nav-item nav-link" href="/saved">Saved articles</a>
+      <a class="nav-item nav-link active text-white" href="/">Home</a>
+      <a class="nav-item nav-link text-white" href="/saved">Saved articles</a>
       <button class="btn btn-info scrape-new">Get new articles</button>
     </div>
   </div>
 </nav>
-
-<div class="jumbotron jumbotron-fluid text-center">
-  <h1 class="text-muted">Get the latest Tech News</h1>
- 
+</div>
+<div class="container  mt-2">
+<div class="jumbotron  text-center">
+  <h3 class="text-muted">Get the latest Tech News</h3>
+ </div>
 </div>
 
 <div class="container article-container">
@@ -27,4 +30,5 @@
       </div>
     </div>
   {{/each}}
+</div>
 </div>
