@@ -38,6 +38,6 @@
     .jumbotron{
       height: 100px;
     }
-    .maincontainer{
+    .maincontainer ,.modal-body{ 
       background-color: whitesmoke
     }

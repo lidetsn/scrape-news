@@ -50,25 +50,27 @@ $(".note-modal-btn").on("click", function(event) {
       type: "GET"
     }).then(
       function(data) {
+        console.log("hi there")
+        console.log(data)
         createModalHTML(data);
       }
     );
     // show the modal
     $("#add-note-modal").modal("toggle");
   });
+
 // generate the text inside the notes modal
 function createModalHTML(data) {
-  var modalText = data.title;
+ // var modalText = data.title;
   $("#note-modal-title").text("Notes for article: " + data.title);
   var noteItem;
   var noteDeleteBtn;
   console.log("data notes legnth ", data.notes.length)
   for (var i = 0; i < data.notes.length; i++) {
     noteItem = $("<li>").text(data.notes[i].body);
-    noteItem.addClass("note-item-list");
+    noteItem.addClass("note-item-list my-2");
     noteItem.attr("id", data.notes[i]._id);
-    //  noteItem.data("id", data.notes[i]._id);
-    noteDeleteBtn = $("<button> Delete </button>").addClass("btn btn-danger delete-note-modal");
+    noteDeleteBtn = $("<button> Delete </button>").addClass("btn btn-outline-danger delete-note-modal");
     noteDeleteBtn.attr("data-noteId", data.notes[i]._id);
     noteItem.prepend(noteDeleteBtn, " ");
     $(".notes-list").append(noteItem);
@@ -76,6 +78,7 @@ function createModalHTML(data) {
 }
 $(".note-save-btn").on("click", function(event) {
   event.preventDefault();
+  if( $("#note-body").val().trim()!==""){
   var articleId = $("#add-note-modal").attr("data-articleId")
   var newNote = {
     body: $("#note-body").val().trim()
@@ -85,8 +88,30 @@ $(".note-save-btn").on("click", function(event) {
     type: "POST",
     data: newNote
   }).then(
-    function(data) {}
-  );
+    function(data) {
+      location.reload();
+    } );
+  }
+  else{
+    $("#error").text("please put your note to save")
+  }
 });
+$("#cancel").on("click", function(event) {
+  event.preventDefault();
+  $("#error").text("")
+
+})
+
+$(document).on("click", ".delete-note-modal", function(event) {
+  var noteID = $(this).attr("data-noteId");
+
+  $.ajax("/notes/" + noteID, {
+    type: "GET"
+  }).then(
+    function(data) {
+      $("#" + noteID).remove();
+    })
+});
+
 
 });

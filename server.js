@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
-//app.use(express.static(path.join(__dirname, 'public')));
+
 // Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI ||"mongodb://localhost/teckNewsDataBase"
 mongoose.connect(MONGODB_URI);
@@ -30,7 +30,7 @@ mongoose.connect(MONGODB_URI);
 app.get("/saved", function(req, res) {
   db.Article.find( {saved: true})
     .then(function(dbArticle) {      
-      console.log(dbArticle)
+      // console.log(dbArticle)
       res.render("saved", {
                   articles: dbArticle
                 });
@@ -42,7 +42,7 @@ app.get("/saved", function(req, res) {
 app.get("/", function(req, res) {
   db.Article.find({saved: false})
     .then(function(dbArticle) {      
-      console.log(dbArticle)
+      // console.log(dbArticle)
       res.render("index", {
                   articles: dbArticle
                 });
@@ -52,7 +52,6 @@ app.get("/", function(req, res) {
     });
 });
 
-// Routes
 // A GET route for scraping the echoJS website
 //==============================================================================================
 app.get("/scrape", function(req, res) {
@@ -60,7 +59,7 @@ axios.get("https://techcrunch.com/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
      console.log(">>>>>>>>>>>>>>.")
-     console.log(response.data)
+    //  console.log(response.data)
     $("div .post-block ").each(function(i, element) {
       // Save an empty result object
       var result = {};     
@@ -76,10 +75,6 @@ axios.get("https://techcrunch.com/").then(function(response) {
         .then(function(dbArticle) {
           //for testing purpose
           console.log(dbArticle);
-          // res.render("index", {
-          //   articles: dbArticle
-          // });
-          
         })
         .catch(function(err) {
           // If an error occurred, log it
@@ -90,6 +85,7 @@ axios.get("https://techcrunch.com/").then(function(response) {
   res.send("Scrape Complete");
   });
 });
+
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
@@ -107,6 +103,7 @@ app.get("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
+
 // Route for saving/updating an Article's associated Note
 app.post("/articles/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
@@ -124,24 +121,36 @@ app.post("/articles/:id", function(req, res) {
       res.json(err);
     });
 });
+//this put the note in the note and send the note id to article and push it in the array
 app.post("/submit/:id", function(req, res) {
+  // console.log(req)
   db.Note.create(req.body)
     .then(function(dbNote) {
-      var articleIdFromString = mongoose.Types.ObjectId(req.params.id)
-      return db.Article.findByIdAndUpdate(articleIdFromString, {
-        $push: {
-          notes: dbNote._id
-        }
-      })
-    })
-    .then(function(dbArticle) {
-      res.json(dbNote);
-    })
-    .catch(function(err) {
-      // If an error occurs, send it back to the client
-      res.json(err);
-    });
+          console.log("=======================")
+          console.log(dbNote)
+          var articleIdFromString = mongoose.Types.ObjectId(req.params.id)
+          console.log("=======================")
+          console.log(articleIdFromString)
+          console.log("=======================")
+          console.log(dbNote._id)
+        db.Article.findByIdAndUpdate(
+            {"_id":articleIdFromString }, {
+             $push:{
+             "notes": dbNote._id
+          }
+        }).exec(function(err, doc){
+          // log any errors
+          if (err){
+            console.log(err);
+          } else {
+            // Send Success Header
+            res.sendStatus(200);
+          }
+        });    
+     })
+     
 });
+
 app.put("/saved/:id", function(req, res) {
   db.Article.findByIdAndUpdate(
       req.params.id, {
@@ -158,12 +167,12 @@ app.put("/saved/:id", function(req, res) {
       res.json(err);
     });
 });
+
 app.put("/unsaved/:id", function(req, res) {
   // Use the article id to find and update its saved boolean
   db.Article.findByIdAndUpdate(req.params.id ,{
     $set:{
-     saved: false 
-     
+     saved: false      
     }
     })
   // Execute the above query
@@ -174,6 +183,35 @@ app.put("/unsaved/:id", function(req, res) {
   })
   .catch(function(err) {
     res.json(err);
+  });
+});
+
+
+app.get("/notes/article/:id", function(req, res) {
+  db.Article.findOne({"_id":req.params.id})
+    .populate("notes")
+
+    .exec(function(err, doc){
+      // log any errors
+      if (err){
+        console.log(err);
+      } 
+      else {
+        
+        res.json(doc)
+        console.log(doc)
+      }
+    });    
+});
+
+app.get("/notes/:id", function(req, res) {
+
+  db.Note.findOneAndRemove({_id:req.params.id}, function (error, data) {
+      if (error) {
+          console.log(error);
+      } else {
+      }
+      res.json(data);
   });
 });
 
